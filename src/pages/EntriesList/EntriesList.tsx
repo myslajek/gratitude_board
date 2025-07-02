@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense } from "react";
 import { EntriesContract } from "../../contracts/EntriesStorageContract";
 import Entry from "../../models/Entry";
 import useSWR from "swr";
@@ -24,9 +24,9 @@ function EntriesContent() {
     isValidating,
   } = useSWR("all-entries", entriesFetcher, { suspense: true });
 
-  const [newEntryNotification, setNewEntryNotification] = useState<
-    string | null
-  >(null);
+  // const [newEntryNotification, setNewEntryNotification] = useState<
+  //   string | null
+  // >(null);
   // const handleEntryAdded = useCallback(
   //   async (user: string, value: string, index: number, event: any) => {
   //     console.log("New entry added:", { user, value, index });
@@ -134,9 +134,9 @@ function EntriesContent() {
       <div className="whiteboard-container">
         <div className="whiteboard">
           <div className="whiteboard-content">
-            {newEntryNotification && (
+            {/* {newEntryNotification && (
               <div className="notification-banner">{newEntryNotification}</div>
-            )}
+            )} */}
 
             <div className="stats">
               <div className="stats-badge">
