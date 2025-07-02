@@ -26,7 +26,7 @@ export default class EntriesStorageContract {
       const entries = await this.contract.getAllEntries();
       return entries.map((entry: any) => ({
         value: entry.value,
-        timestamp: Number(entry.timestamp),
+        timestamp: Number(entry.timestamp) * 1000,
         author: entry.address,
       }));
     } catch (error) {

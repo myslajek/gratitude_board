@@ -8,7 +8,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 
 const entriesFetcher = async (): Promise<Entry[]> => {
-  return await EntriesContract.getAllEntries();
+  const entries = await EntriesContract.getAllEntries();
+
+  const sortedEntries =
+    entries?.sort((a, b) => b.timestamp - a.timestamp) || [];
+
+  return sortedEntries;
 };
 
 function EntriesContent() {
@@ -112,8 +117,6 @@ function EntriesContent() {
   //   };
   // }, [handleEntryAdded, handleEntryRemoved]);
 
-   const sortedEntries = entries?.sort((a, b) => b.timestamp - a.timestamp) || [];
-
   const handleRefresh = async () => {
     await mutate();
   };
@@ -137,7 +140,7 @@ function EntriesContent() {
 
             <div className="stats">
               <div className="stats-badge">
-                Entries count: {sortedEntries?.length || 0}
+                Entries count: {entries?.length || 0}
               </div>
 
               <button
@@ -154,11 +157,11 @@ function EntriesContent() {
             )}
 
             <ul className="entries-list">
-              {sortedEntries?.map((entry, index) => (
+              {entries?.map((entry, index) => (
                 <li key={index} className="entry-item">
                   <div className="entry-value">{entry.value}</div>
                   <div className="entry-timestamp">
-                    {new Date(entry.timestamp*1000).toLocaleString("pl-PL")}
+                    {new Date(entry.timestamp * 1000).toLocaleString("pl-PL")}
                   </div>
                 </li>
               ))}
