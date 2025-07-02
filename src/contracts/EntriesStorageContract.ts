@@ -11,8 +11,8 @@ export default class EntriesStorageContract {
   private contractAddress: string;
 
   constructor() {
-    this.contractAddress = "0x18c572D691A54cf7d19a10E570Bc71DA6bffcC28";
-    this.networkConfig = NetworkConfigs[SupportedNetwork.sonicTestnet];
+    this.contractAddress = "0x0c1CeD90789bB4dfB991460f83393040E2D92F44";
+    this.networkConfig = NetworkConfigs[SupportedNetwork.sonic];
     this.provider = new ethers.JsonRpcProvider(this.networkConfig.rpcUrl);
     this.contract = new ethers.Contract(
       this.contractAddress,
