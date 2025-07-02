@@ -22,95 +22,97 @@ function EntriesContent() {
   const [newEntryNotification, setNewEntryNotification] = useState<
     string | null
   >(null);
-  const handleEntryAdded = useCallback(
-    async (user: string, value: string, index: number, event: any) => {
-      console.log("New entry added:", { user, value, index });
+  // const handleEntryAdded = useCallback(
+  //   async (user: string, value: string, index: number, event: any) => {
+  //     console.log("New entry added:", { user, value, index });
 
-      // Show notification
-      setNewEntryNotification(
-        `New entry added: "${value.substring(0, 50)}${
-          value.length > 50 ? "..." : ""
-        }"`
-      );
+  //     // Show notification
+  //     setNewEntryNotification(
+  //       `New entry added: "${value.substring(0, 50)}${
+  //         value.length > 50 ? "..." : ""
+  //       }"`
+  //     );
 
-      setTimeout(() => setNewEntryNotification(null), 3000);
+  //     setTimeout(() => setNewEntryNotification(null), 3000);
 
-      try {
-        // Get the exact timestamp from the blockchain
-        const block = await event.getBlock();
-        const timestamp = block.timestamp;
+  //     try {
+  //       // Get the exact timestamp from the blockchain
+  //       const block = await event.getBlock();
+  //       const timestamp = block.timestamp;
 
-        // Add the new entry directly to the list
-        const newEntry: Entry = {
-          value: value,
-          timestamp: timestamp,
-          author: user,
-        };
+  //       // Add the new entry directly to the list
+  //       const newEntry: Entry = {
+  //         value: value,
+  //         timestamp: timestamp,
+  //         author: user,
+  //       };
 
-        // Update SWR cache
-        mutate((currentEntries) => {
-          return currentEntries ? [...currentEntries, newEntry] : [newEntry];
-        }, false);
-      } catch (error) {
-        console.error("Error processing new entry:", error);
-        // Fallback to full refresh
-        mutate();
-      }
-    },
-    [mutate]
-  );
+  //       // Update SWR cache
+  //       mutate((currentEntries) => {
+  //         return currentEntries ? [...currentEntries, newEntry] : [newEntry];
+  //       }, false);
+  //     } catch (error) {
+  //       console.error("Error processing new entry:", error);
+  //       // Fallback to full refresh
+  //       mutate();
+  //     }
+  //   },
+  //   [mutate]
+  // );
 
-  const handleEntryRemoved = useCallback(
-    (manager: string, index: number, value: string) => {
-      console.log("Entry removed:", { manager, index, value });
+  // const handleEntryRemoved = useCallback(
+  //   (manager: string, index: number, value: string) => {
+  //     console.log("Entry removed:", { manager, index, value });
 
-      mutate();
-    },
-    [mutate]
-  );
+  //     mutate();
+  //   },
+  //   [mutate]
+  // );
 
-  useEffect(() => {
-    let cleanupEntryAdded: (() => void) | null = null;
-    let cleanupEntryRemoved: (() => void) | null = null;
-    let isMounted = true;
+  // useEffect(() => {
+  //   let cleanupEntryAdded: (() => void) | null = null;
+  //   let cleanupEntryRemoved: (() => void) | null = null;
+  //   let isMounted = true;
 
-    const setupEventListeners = async () => {
-      try {
-        console.log("Setting up event listeners...");
+  //   const setupEventListeners = async () => {
+  //     try {
+  //       console.log("Setting up event listeners...");
 
-        cleanupEntryAdded = await EntriesContract.onEntryAdded(
-          handleEntryAdded
-        );
-        cleanupEntryRemoved = await EntriesContract.onEntryRemoved(
-          handleEntryRemoved
-        );
+  //       cleanupEntryAdded = await EntriesContract.onEntryAdded(
+  //         handleEntryAdded
+  //       );
+  //       cleanupEntryRemoved = await EntriesContract.onEntryRemoved(
+  //         handleEntryRemoved
+  //       );
 
-        if (isMounted) {
-          console.log("Event listeners set up successfully");
-        }
-      } catch (error) {
-        if (isMounted) {
-          console.error("Failed to set up event listeners:", error);
-        }
-      }
-    };
+  //       if (isMounted) {
+  //         console.log("Event listeners set up successfully");
+  //       }
+  //     } catch (error) {
+  //       if (isMounted) {
+  //         console.error("Failed to set up event listeners:", error);
+  //       }
+  //     }
+  //   };
 
-    setupEventListeners();
+  //   setupEventListeners();
 
-    // Cleanup function
-    return () => {
-      isMounted = false;
-      console.log("Cleaning up event listeners...");
+  //   // Cleanup function
+  //   return () => {
+  //     isMounted = false;
+  //     console.log("Cleaning up event listeners...");
 
-      if (cleanupEntryAdded) {
-        cleanupEntryAdded();
-      }
-      if (cleanupEntryRemoved) {
-        cleanupEntryRemoved();
-      }
-      console.log("Event listeners cleaned up");
-    };
-  }, [handleEntryAdded, handleEntryRemoved]);
+  //     if (cleanupEntryAdded) {
+  //       cleanupEntryAdded();
+  //     }
+  //     if (cleanupEntryRemoved) {
+  //       cleanupEntryRemoved();
+  //     }
+  //     console.log("Event listeners cleaned up");
+  //   };
+  // }, [handleEntryAdded, handleEntryRemoved]);
+
+   const sortedEntries = entries?.sort((a, b) => b.timestamp - a.timestamp) || [];
 
   const handleRefresh = async () => {
     await mutate();
@@ -135,7 +137,7 @@ function EntriesContent() {
 
             <div className="stats">
               <div className="stats-badge">
-                Entries count: {entries?.length || 0}
+                Entries count: {sortedEntries?.length || 0}
               </div>
 
               <button
@@ -152,11 +154,11 @@ function EntriesContent() {
             )}
 
             <ul className="entries-list">
-              {entries?.map((entry, index) => (
+              {sortedEntries?.map((entry, index) => (
                 <li key={index} className="entry-item">
                   <div className="entry-value">{entry.value}</div>
                   <div className="entry-timestamp">
-                    {new Date(entry.timestamp).toLocaleString("pl-PL")}
+                    {new Date(entry.timestamp*1000).toLocaleString("pl-PL")}
                   </div>
                 </li>
               ))}
