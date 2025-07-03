@@ -160,7 +160,7 @@ function EntriesContent() {
             <ul className="entries-list">
               {entries?.map((entry, index) => (
                 <li key={index} className="entry-item">
-                  <Emoji className="entry-value">{entry.value}</Emoji>
+                  <div className="entry-value">{entry.value}</div>
                   <div className="entry-timestamp">
                     {new Date(entry.timestamp).toLocaleString("pl-PL")}
                   </div>
