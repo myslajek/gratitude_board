@@ -6,6 +6,7 @@ import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import "./EntriesList.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRefresh } from "@fortawesome/free-solid-svg-icons";
+import Emoji from "react-emoji-render";
 
 const entriesFetcher = async (): Promise<Entry[]> => {
   const entries = await EntriesContract.getAllEntries();
@@ -159,9 +160,9 @@ function EntriesContent() {
             <ul className="entries-list">
               {entries?.map((entry, index) => (
                 <li key={index} className="entry-item">
-                  <div className="entry-value">{entry.value}</div>
+                  <Emoji className="entry-value">{entry.value}</Emoji>
                   <div className="entry-timestamp">
-                    {new Date(entry.timestamp * 1000).toLocaleString("pl-PL")}
+                    {new Date(entry.timestamp).toLocaleString("pl-PL")}
                   </div>
                 </li>
               ))}
