@@ -33,24 +33,6 @@
   font-family: "Caveat", cursive;
 }
 
-.main-title::before {
-  content: "🌿";
-  position: absolute;
-  left: -2.5rem;
-  top: 50%;
-  transform: translateY(-50%) rotate(-15deg);
-  font-size: 1.5rem;
-}
-
-.main-title::after {
-  content: "🌿";
-  position: absolute;
-  right: -2.5rem;
-  top: 50%;
-  transform: translateY(-50%) rotate(15deg) scaleX(-1);
-  font-size: 1.5rem;
-}
-
 /* Spinner Animation */
 .spinner {
   width: 14px;
